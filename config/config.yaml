@@ -1,0 +1,16 @@
+risk:
+  weights:
+    alpha: 0.3
+    beta: 0.5
+    gamma: 0.2
+  
+  pattern_weights:
+    language: 0.2
+    domain: 0.3
+    time_sensitivity: 0.2
+    prohibited_content: 0.3
+  
+  warn_threshold: 0.7
+  block_threshold: 0.9
+
+log_level: "INFO"
