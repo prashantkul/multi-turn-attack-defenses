@@ -14,3 +14,7 @@ risk:
   block_threshold: 0.9
 
 log_level: "INFO"
+
+file_path: "dataset/harmbench_behaviors.csv"
+
+gcp_project_id: "pk-arg-prj4-datasci"
