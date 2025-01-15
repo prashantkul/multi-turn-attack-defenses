@@ -128,12 +128,12 @@ class LLMManager:
         )
 
         # Access and print the attributes
-        print("Risk Level:", response_out.risk_level)
-        print("Recommendations:", response_out.recommendations)
-        print("Intent Shift Details:", response_out.intent_shift)
-        print("Prompt Attack Details:", response_out.prompt_attack)
-        print("Patterns:", response_out.patterns)
-        print("Overall Progression Summary:", response_out.overall_progression_summary)
+        # print("Risk Level:", response_out.risk_level)
+        # print("Recommendations:", response_out.recommendations)
+        # print("Intent Shift Details:", response_out.intent_shift)
+        # print("Prompt Attack Details:", response_out.prompt_attack)
+        # print("Patterns:", response_out.patterns)
+        # print("Overall Progression Summary:", response_out.overall_progression_summary)
 
         return response_out.dict()
 

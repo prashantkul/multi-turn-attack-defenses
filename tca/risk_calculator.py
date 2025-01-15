@@ -35,15 +35,28 @@ class RiskCalculator:
         Returns:
             int: Total pattern risk score.
         """
-        print(f"Caluculating pattern risk, incoming patterns: {patterns}")
+        print("\n" + "=" * 40)
+        print("Pattern Risk Calculation:")
+        print(f"Incoming patterns: {patterns}")
+        print("-" * 40)
+
         risk_score = 0
         for pattern, details in patterns.items():
-            print(f"Pattern: {pattern}, Details: {details}")
-            if details.get("detected", False):  # Check if the pattern was detected
-                risk_score += self.pattern_weights.get(pattern, 0)
+            detected = details.get("detected", False)
+            weight = self.pattern_weights.get(pattern, 0)
+            contribution = weight if detected else 0
+            print(f"  Pattern: {pattern}")
+            print(f"    Detected: {detected}")
+            print(f"    Weight: {weight:.4f}")
+            print(f"    Contribution to Risk: {contribution:.4f}")
+            print("-" * 40)
+            risk_score += contribution
+
+        print(f"Total Pattern Risk Score: {risk_score:.4f}")
+        print("=" * 40 + "\n")
         return risk_score
 
-    def calculate_progressive_risk(self, interaction_risk, pattern_risk):
+    def calculate_progressive_risk(self, historical_risk, interaction_risk, pattern_risk):
         """
         Calculate the progressive risk score for the current step.
 
@@ -55,11 +68,21 @@ class RiskCalculator:
             float: The progressive risk score.
         """
         progressive_risk = (
-            self.alpha * self.historical_risk
+            self.alpha * historical_risk
             + self.beta * interaction_risk
             + self.gamma * pattern_risk
         )
         self.historical_risk = progressive_risk  # Update historical risk
+        # Print calculation details
+        print("\n" + "=" * 40)
+        print("Progressive Risk Calculation:")
+        print("Progressive risk = α * Historical Risk + β * Interaction Risk + γ * Pattern Risk")
+        print(f"The weights α: {self.alpha}, β: {self.beta}, γ: {self.gamma}")
+        print(f"  Historical Risk (α * {historical_risk}): {self.alpha * historical_risk:.4f}")
+        print(f"  Interaction Risk (β * {interaction_risk}): {self.beta * interaction_risk:.4f}")
+        print(f"  Pattern Risk (γ * {pattern_risk}): {self.gamma * pattern_risk:.4f}")
+        print(f"  Progressive Risk: {progressive_risk:.4f}")
+        print("=" * 40 + "\n")
         return progressive_risk
 
     def reset_historical_risk(self):
