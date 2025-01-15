@@ -1,5 +1,5 @@
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
 import json
 from typing import Dict, Any, Tuple
@@ -10,7 +10,7 @@ import google.generativeai as genai
 # import replicate
 from prompts.prompt_templates import PromptManager
 from config.tca_config import TCAConfig
-
+from prompts.prompt_response import Response
 
 class LLMManager:
     def __init__(self, prompt_manager: PromptManager):
@@ -23,7 +23,9 @@ class LLMManager:
         self.prompt_manager = prompt_manager
         self.config = TCAConfig("config/config.yaml")
         # Load environment variables from .env file
-        load_dotenv()
+        load_dotenv(find_dotenv())
+
+        print("Did dotenv loaded correctly: ", os.getenv("OPENAI_API_KEY"))
 
         # Access environment variables
         openai_api_key = os.getenv("OPENAI_API_KEY")
@@ -71,9 +73,10 @@ class LLMManager:
             Dict[str, Any]: The analysis result from the LLM.
         """
         template = self.prompt_manager.get_template(llm_type)
+        print("*" * 50)
         print("Formatting prompt now")
         prompt = template.format(prev_pair=prev_pair, current_pair=current_pair)
-        print("Prompt formatted: " + prompt)
+        # print("Prompt formatted: " + prompt)
 
         handlers = {
             "gpt": self._call_gpt,
@@ -99,11 +102,55 @@ class LLMManager:
             Dict[str, Any]: The response as a JSON dictionary.
         """
         response = await self.openai_client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.1,
         )
-        return json.loads(response.choices[0].message.content)
+
+        # Extract content from OpenAI response
+        response_content = response.choices[0].message.content
+
+        # Parse the content to extract structured information
+        # You'll need to implement this based on your content structure
+        parsed_data = self.parse_content(
+            response_content
+        )  # This function needs to be implemented
+
+        # Create Response instance with all fields
+        response_out = Response(
+            content=response_content,
+            risk_level=parsed_data.get("risk_level"),
+            recommendations=parsed_data.get("recommendations"),
+            intent_shift=parsed_data.get("intent_shift"),
+            prompt_attack=parsed_data.get("prompt_attack"),
+            patterns=parsed_data.get("patterns"),
+            overall_progression_summary=parsed_data.get("overall_progression_summary"),
+        )
+
+        # Access and print the attributes
+        print("Risk Level:", response_out.risk_level)
+        print("Recommendations:", response_out.recommendations)
+        print("Intent Shift Details:", response_out.intent_shift)
+        print("Prompt Attack Details:", response_out.prompt_attack)
+        print("Patterns:", response_out.patterns)
+        print("Overall Progression Summary:", response_out.overall_progression_summary)
+
+        return response_out.dict()
+
+    def parse_content(self, content: str) -> dict:
+        """
+        Parse the OpenAI response content to extract structured information.
+        This is a placeholder - implement based on your content structure.
+        """
+        # Example implementation - you'll need to modify this based on your actual content structure
+        return {
+            'risk_level': None,
+            'recommendations': [],
+            'intent_shift': {},
+            'prompt_attack': {},
+            'patterns': {},
+            'overall_progression_summary': {}
+        }
 
     async def _call_claude(self, prompt: str) -> Dict[str, Any]:
         """
