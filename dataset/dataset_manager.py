@@ -57,26 +57,42 @@ class DatasetManager:
 
         return conversation_pairs
 
-
-    def process_row(self, row: pd.Series) -> Dict[str, Any]:
-        return {
-            "source": row["Source"],
-            "temperature": row["temperature"],
-            "tactic": row["tactic"],
-            "question_id": row["question_id"],
-            "time_spent": row["time_spent"],
-            "submission_message": row["submission_message"],
-            "conversation": self.get_conversation_history(row),
-        }
+    # def process_row(self, row: pd.Series) -> Dict[str, Any]:
+    #     return {
+    #         "source": row["Source"],
+    #         "temperature": row["temperature"],
+    #         "tactic": row["tactic"],
+    #         "question_id": row["question_id"],
+    #         "time_spent": row["time_spent"],
+    #         "submission_message": row["submission_message"],
+    #         "conversation": self.get_conversation_history(row),
+    #     }
 
     def get_metadata(self, df: pd.DataFrame) -> Dict[str, Any]:
-        return {
+        metadata = {
             "total_records": len(df),
+            "columns": df.columns.tolist(),
             "unique_sources": df["Source"].unique().tolist(),
             "unique_tactics": df["tactic"].unique().tolist(),
+            "unique_tactics_count": len(df["tactic"].unique()),
+            "tactic_counts": df["tactic"].value_counts().to_dict(),
+            "avg_time_by_tactic" : df.groupby('tactic')['time_spent'].mean(),
             "avg_time_spent": df["time_spent"].mean(),
-            "temperature_stats": df["temperature"].describe().to_dict(),
         }
+
+        print("Dataset Metadata:")
+        for key, value in metadata.items():
+            print(f"  {key}:")
+            if isinstance(value, list):
+                for item in value:
+                    print(f"    - {item}")
+            elif isinstance(value, dict):
+                for sub_key, sub_value in value.items():
+                    print(f"    - {sub_key}: {sub_value}")
+            else:
+                print(f"    {value}")
+
+        return metadata
 
     def display_beautified_conversation(self, row):
         # Header with conversation metadata
