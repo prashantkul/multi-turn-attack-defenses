@@ -73,10 +73,10 @@ class RiskConfig:
         return self
 
     def validate_weights(self):
-        print("Validating weights...")
+        #print("Validating weights for RiskConfig)}}...")
         self.weights.validate_weights()
         self.pattern_weights.validate_weights()
-        print("Weights validation passed.")
+        #print("Weights validation passed.")
 
     def log_config(self):
         print("Risk Configuration:")
