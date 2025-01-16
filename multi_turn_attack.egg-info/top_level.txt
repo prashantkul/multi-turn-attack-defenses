@@ -1,8 +1,0 @@
-config
-dataset
-docs
-example
-llms
-prompt_templates
-tca
-tests
