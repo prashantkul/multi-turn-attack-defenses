@@ -1,4 +1,4 @@
-# Repository Title: Temporal Context Awareness (TCA) Framework for Securing LLMs
+# Temporal Context Awareness (TCA) Framework for Securing LLMs
 
 # Description
 This repository contains the implementation of the Temporal Context Awareness (TCA) framework, a novel defense mechanism designed to protect Large Language Models (LLMs) from multi-turn manipulation attacks. These attacks exploit the conversational nature of LLMs, gradually building context across multiple turns to elicit harmful or unauthorized responses.
@@ -27,7 +27,7 @@ The TCA framework combines the following components to detect and mitigate adver
 * Run simulations on adversarial conversations to evaluate and test the framework.
 * Customize risk scoring weights and thresholds for your use case.
 * Adapt the security decision engine for your organization's LLM deployment needs.
-* 
+  
 ## How to Cite
 If you use this repository in your work, please cite:
 @misc{tca2025,
