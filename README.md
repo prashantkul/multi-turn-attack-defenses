@@ -28,11 +28,4 @@ The TCA framework combines the following components to detect and mitigate adver
 * Customize risk scoring weights and thresholds for your use case.
 * Adapt the security decision engine for your organization's LLM deployment needs.
   
-## How to Cite
-If you use this repository in your work, please cite:
-@misc{tca2025,
-  title={Temporal Context Awareness (TCA) Framework for Securing LLMs},
-  author={Kulkarni et all},
-  year={2025},
-  url={(https://github.com/prashantkul/multi-turn-attack)}
-}
+
